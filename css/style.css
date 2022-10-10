@@ -1,0 +1,165 @@
+/* Custom Properties */
+
+:root {
+  --first-color: #D90062;
+  --first-alpha-color: rgba(217, 0, 98, 0.75);
+  --second-color: #14192D;
+  --second-alpha-color: rgba(20, 25, 45, 0.75);
+  --third-color: #501464;
+  --third-alpha-color: rgba(80, 20, 100, 0.75);
+  --white-color: #FFFFFF;
+  --gray-light-color: #F3F3F3;
+  --gray-color: #CCCCCC;
+  --gray-dark-color: #666666;
+  --black-color: #000000;
+  --link-color: #509EE3;
+  --title-color: #333333;
+  --text-color: #222222;
+  --font: 'Raleway', sans-serif;
+  --header-height: 4rem;
+  --max-width: 1200px;
+}
+
+/* Reseteo */
+html {
+  box-sizing: border-box;
+  font-family: var(--font);
+  font-size: 16px;
+}
+
+*,
+*::after,
+*::before {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+  color: var(--text-color);
+}
+
+a {
+  color: var(--link-color);
+  text-decoration: none;
+  transition: all 0.5s ease-out;
+}
+
+a:hover {
+  opacity: 0.75;
+}
+
+h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+h3 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+h4 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+h5 {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+h6 {
+  margin: 0;
+  font-size: 0.7rem;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Utilidades */
+.box-shadow-1 {
+  box-shadow: .25rem .25rem 1rem rgba(0, 0, 0, 0.25);
+}
+
+.btn {
+  border-radius: .5rem;
+  padding: 1rem;
+  display: inline-block;
+  width: 200px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  color: var(--white-color);
+  background-color: var(--first-color);
+  text-transform: uppercase;
+  border: 0;
+}
+
+.section {
+  padding: 2rem 1rem;
+}
+
+.container {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: var(--max-width);
+}
+
+.none {
+  display: none;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+/* Site styles */
+.carrito{
+  color: var(--white-color);
+  font-size: 1.5rem;
+  padding: .8rem;
+  border-radius: 50%;
+}
+
+.carrito:hover{
+  background-color: var(--third-color);
+}
+
+.header{
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  background-color: var(--second-color);
+  color: var(--white-color);
+  height: var(--header-height);
+}
+
+.header h1{
+  text-transform: uppercase;
+  font-size: 3.5vw;
+}
+
+.navegacion{
+}
+
