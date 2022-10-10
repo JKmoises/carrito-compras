@@ -39,12 +39,15 @@ body {
   color: var(--text-color);
 }
 
+button,
 a {
   color: var(--link-color);
   text-decoration: none;
+  cursor: pointer;
   transition: all 0.5s ease-out;
 }
 
+button:hover,
 a:hover {
   opacity: 0.75;
 }
@@ -96,15 +99,14 @@ p {
 
 .btn {
   border-radius: .5rem;
-  padding: 1rem;
+  padding: .5rem;
   display: inline-block;
-  width: 200px;
   font-weight: bold;
   text-align: center;
+  width: 100%;
   text-decoration: none;
   color: var(--white-color);
   background-color: var(--first-color);
-  text-transform: uppercase;
   border: 0;
 }
 
@@ -135,16 +137,60 @@ p {
 }
 
 /* Site styles */
+.btn-limpiar{
+  background-color: transparent;
+  color: var(--title-color);
+  text-transform: uppercase;
+  border: thin solid var(--gray-dark-color);
+  border-radius: 0;
+}
+
+.btn-limpiar:hover{
+  background-color: var(--second-color);
+  color: var(--white-color);
+  opacity: 1;
+}
+
+.btn-limpiar{
+
+}
+
 .carrito{
+  color: var(--text-color);
+}
+
+.carrito-container{
+  position: absolute;
+  top: var(--header-height);
+  right: 0;
+  background-color: var(--white-color);
+  width: 50%;
+  padding: 1rem;
+}
+
+
+.carrito-icon{
+  display: block;
+  padding: .8rem; 
   color: var(--white-color);
   font-size: 1.5rem;
-  padding: .8rem;
   border-radius: 50%;
 }
 
-.carrito:hover{
+.carrito-icon:hover {
   background-color: var(--third-color);
 }
+
+.navegacion{
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.navegacion:hover > .carrito-container{
+  display: block; 
+}
+
 
 .header{
   display: flex;
@@ -160,6 +206,11 @@ p {
   font-size: 3.5vw;
 }
 
-.navegacion{
+@media screen and (min-width: 768px) {
+  .carrito-container {
+    width: 25%;
+  }
 }
+
+
 
