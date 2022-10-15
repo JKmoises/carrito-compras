@@ -222,7 +222,13 @@ p {
   background-color: var(--gray-light-color);
   padding: 1rem;
   max-width: 100%;
-  flex: 0 0 18rem;
+  flex: 0 0 21rem;
+  transition: all .5s ease-in-out;
+}
+
+.animar-producto:hover{
+  opacity: .8;
+  transform: scale(.95);
 }
 
 
@@ -230,6 +236,18 @@ p {
   width: 80%;
   margin: 0 auto;
   background-color: var(--third-color);
+}
+
+.producto > .producto-img{
+  height: 60%;
+}
+
+.producto > .producto-img img{
+  display: block;
+  width: 10rem;
+  height: 100%;
+  object-fit: cover;
+  margin: 0 auto;
 }
 
 .producto > .nombre{
