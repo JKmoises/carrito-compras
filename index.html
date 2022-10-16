@@ -26,8 +26,13 @@
         <section class="carrito-container box-shadow-1 none">
           <button id="btn-limpiar" class="btn btn-limpiar">Limpiar Carrito</button>
         
-          <ul id="carrito">
+          <ul id="carrito" class="carrito">
           </ul>
+
+          <div class="container-total">
+            <h2>Total: <span class="total">$0</span></h2>
+          </div>
+
           <button id="btn-comprar" class="btn btn-comprar">Terminar Compra</button>
         </section>
       </nav>
@@ -63,14 +68,15 @@
 
         <div class="precio-unidades-container">
           <span class="unidades"></span>
+          <span class="equis">X</span>
           <span class="precio"></span>
         </div>
 
         <h4 class="subtotal"></h4>
 
         <div class="acciones">
-          <button class="btn-agregar">+</button>
-          <button class="btn-quitar">-</button>
+          <button class="btn btn-agregar">+</button>
+          <button class="btn btn-quitar">-</button>
         </div>
       </li>
     </template>

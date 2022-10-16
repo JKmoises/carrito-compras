@@ -31,19 +31,23 @@ let productos = [
   },
 ];
 
-const objProductoCarrito = {
+let objProductoCarrito = {
   id: '',
   nombre: '',
   precio: 0,
-  unidades: 0
+  unidades: 0,
+  total: 0
 }
 
 let carrito = [];
 
+
 function iniciarApp(){
   renderizarProductos();
   animarCardProducto();
+  agregarProductoEnCarrito();
 }
+
 
 function renderizarProductos() {
   const $productosContainer = document.querySelector('#productos');
@@ -54,8 +58,8 @@ function renderizarProductos() {
     $template.querySelector('.producto').dataset.productoId = id;
     $template.querySelector('.producto-img > img').src = `assets/${imagen}`;
     $template.querySelector('.nombre').textContent = nombre;
-    $template.querySelector('.unidades').innerHTML = `<sub>${unidades}</sub> unidades`;
-    $template.querySelector('.precio').innerHTML = `<sup>$</sup>${formatPrecio(precio)}`;
+    $template.querySelector('.unidades').innerHTML = /* html */`<sub>${unidades}</sub> unidades`;
+    $template.querySelector('.precio').innerHTML = /* html */`<sup>$</sup>${formatPrecio(precio)}`;
     
     let clone = document.importNode($template,true);
     
@@ -64,23 +68,45 @@ function renderizarProductos() {
   $productosContainer.appendChild($fragment);
 }
 
-function agregarEnCarrito(e) {
-  let producto = e.target.parentElement;
-  // renderizarCarrito();
+function agregarProductoEnCarrito() {
+  const $botonesProductos = document.querySelectorAll('.btn-producto');
+
+  $botonesProductos.forEach($btnProducto => {
+    $btnProducto.addEventListener('click', e => {
+      let productoId = parseInt(e.target.parentElement.dataset.productoId);
+      let producto = productos.filter(producto => producto.id === productoId);
+      let [{ id, nombre, precio, unidades }] = producto;
+      
+      objProductoCarrito.id = id;
+      objProductoCarrito.nombre = nombre;
+      objProductoCarrito.precio = precio;
+      objProductoCarrito.unidades = unidades;
+
+      calcularCompra();
+
+      carrito = [...carrito, {...objProductoCarrito}];
+      renderizarCarrito();
+    });
+  });
 }
 
-function renderizarCarrito(){
+function calcularCompra(){
+  
+}
+
+function renderizarCarrito() {
+  limpiarHTML();
+
   const $carritoContainer = document.querySelector('#carrito');
   const $template = document.querySelector('#template-carrito').content;
   const $fragment = document.createDocumentFragment();
 
-  carrito.forEach(({ id, nombre, precio, unidades }) => {
+  carrito.forEach(({ id,nombre, precio, unidades },index) => {
     $template.querySelector('.producto-carrito').dataset.productoId = id;
-    $template.querySelector('.producto-img > img').src = `assets/${imagen}`;
     $template.querySelector('.nombre').textContent = nombre;
-    $template.querySelector('.unidades').innerHTML = `<sub>${unidades}</sub> unidades`;
-    $template.querySelector('.precio').innerHTML = `<sup>$</sup>${formatPrecio(precio)}`;
-    $template.querySelector('.btn-producto').onclick = agregarEnCarrito;
+    $template.querySelector('.nombre').classList.add('text-center');
+    $template.querySelector('.unidades').innerHTML = unidades;
+    $template.querySelector('.precio').innerHTML = `$${formatPrecio(precio)}`;
 
     let clone = document.importNode($template, true);
 
@@ -98,16 +124,24 @@ function formatPrecio(precio) {
   return precio.toLocaleString('es-ES',options);
 }
 
-function animarCardProducto(){
-  const $botonesCarrito = document.querySelectorAll('.btn-producto');
+function animarCardProducto() {
+  const $botonesProductos = document.querySelectorAll('.btn-producto');
 
-  $botonesCarrito.forEach(($botonCarrito,i) => {
-    $botonCarrito.addEventListener('mouseenter', () => {
-      $botonCarrito.parentElement.classList.add('animar-producto')
+  $botonesProductos.forEach(($btnProducto,i) => {
+    $btnProducto.addEventListener('mouseenter', () => {
+      $btnProducto.parentElement.classList.add('animar-producto')
     });
 
-    $botonCarrito.addEventListener('mouseout', () => {
-      $botonCarrito.parentElement.classList.remove('animar-producto')
+    $btnProducto.addEventListener('mouseout', () => {
+      $btnProducto.parentElement.classList.remove('animar-producto')
     });
   });
+}
+
+function limpiarHTML(){
+  const $carrito = document.querySelector('.carrito');
+
+  while ($carrito.firstElementChild) {
+    $carrito.firstElementChild.remove();
+  }
 }

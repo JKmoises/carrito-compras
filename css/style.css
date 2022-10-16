@@ -12,6 +12,7 @@
   --gray-color: #CCCCCC;
   --gray-dark-color: #666666;
   --black-color: #000000;
+  --green-color:#186A3B;
   --link-color: #509EE3;
   --title-color: #333333;
   --text-color: #222222;
@@ -158,8 +159,65 @@ p {
 
 
 .carrito{
+  list-style: none;
+  padding-left: 0;
   color: var(--text-color);
 }
+
+.carrito > .producto-carrito{
+  font-weight: 700;
+  padding: 1rem 0;
+  border-bottom: thin solid var(--text-color);
+}
+
+.carrito > .producto-carrito:first-child {
+  padding-top: 0;
+}
+
+.carrito > .producto-carrito:last-child{
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.carrito > .producto-carrito .acciones{
+  display: flex;
+  justify-content: center;
+  gap: 
+  .5rem;
+  margin-top: .5rem;
+}
+
+.carrito > .producto-carrito .btn{
+  background-color: var(--text-color);
+  font-size: 1.1rem;
+  padding: .25rem;
+  flex: 0 0 2rem;
+}
+
+.carrito > .producto-carrito .equis{
+  font-size: 1.1rem;
+  color: var(--link-color);
+}
+
+.carrito > .producto-carrito .nombre{
+  text-transform: uppercase;
+}
+
+.carrito > .producto-carrito .precio-unidades-container{
+  display: flex;
+  justify-content: center;
+  gap: .5rem;
+}
+
+.carrito > .producto-carrito .precio{
+  color: var(--green-color);
+  font-style: oblique;
+}
+
+.carrito > .producto-carrito .unidades{
+  font-style: italic;
+}
+
 
 .carrito-container{
   position: absolute;
@@ -168,6 +226,15 @@ p {
   background-color: var(--white-color);
   width: 50%;
   padding: 1rem;
+}
+
+.carrito-container > .container-total{
+  margin-bottom: 1rem;
+  color: var(--title-color);
+}
+
+.carrito-container > .container-total .total{
+  color: var(--green-color);
 }
 
 
@@ -208,6 +275,10 @@ p {
   font-size: 3.5vw;
 }
 
+.nombre {
+  color: var(--title-color);
+}
+
 .productos{
   display: flex;
   justify-content: center;
@@ -226,7 +297,7 @@ p {
   transition: all .5s ease-in-out;
 }
 
-.animar-producto:hover{
+.producto.animar-producto:hover{
   opacity: .8;
   transform: scale(.95);
 }
@@ -250,22 +321,18 @@ p {
   margin: 0 auto;
 }
 
-.producto > .nombre{
-  color: var(--title-color);
-}
-
-.producto .precio{
+.precio{
   font-size: 1.4rem;
   color: var(--second-color);
 }
 
-.producto .precio > sup{
+.precio > sup{
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--link-color);
 }
 
-.producto > .precio-unidades-container{
+.precio-unidades-container{
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -273,11 +340,11 @@ p {
   align-items: center;
 }
 
-.producto .unidades{
+.unidades{
   font-size: 1.5rem;
 }
 
-.producto .unidades > sub{
+.unidades > sub{
   font-size: 1.3rem;
   font-weight: 700;
   color: var(--black-color);
@@ -289,9 +356,11 @@ p {
     width: 25%;
   }
 
-  .producto > .precio-unidades-container{
+  .precio-unidades-container{
     flex-direction: row;
   }
+
+ 
 }
 
 
