@@ -53,7 +53,8 @@ function iniciarApp() {
   renderizarProductos();
   animarCardProducto();
   agregarProductoEnCarrito();
-  calcularTotalCompra();
+  renderizarCarrito();
+  calcularSubtotalCompra();
 }
 
 function renderizarProductos() {
@@ -88,41 +89,57 @@ function agregarProductoEnCarrito() {
       let productoId = parseInt(e.target.parentElement.dataset.productoId);
       let producto = productos.filter((producto) => producto.id === productoId);
       let [{ id, nombre, precio }] = producto;
-
+      
       objProductoCarrito.id = id;
       objProductoCarrito.nombre = nombre;
       objProductoCarrito.precio = precio;
       objProductoCarrito.subtotal = precio;
 
-      let existeProducto = carrito.find(
-        (producto) => producto.id === objProductoCarrito.id
-      );
+      let existeProducto = carrito.find((producto) => producto.id === objProductoCarrito.id);
       if (existeProducto) return;
-
-      calcularCompra();
-
+      
+      
       carrito = [...carrito, { ...objProductoCarrito }];
-      // console.log(carrito);
       renderizarCarrito();
+      
     });
   });
 }
 
-function calcularCompra() {
-  calcularTotalCompra();
+
+function calcularSubtotalCompra() {
+  document.addEventListener('click', e => {
+    if (!(e.target.matches('.btn-agregar') || e.target.matches('.btn-quitar'))) return;
+    
+    if (e.target.matches('.btn-agregar')) {
+      let productoCarritoId = parseInt(e.target.parentElement.parentElement.dataset.productoId);
+
+      carrito
+        .filter(producto => producto.id === productoCarritoId)
+        .map(producto => {
+          producto.unidades += 1;
+          producto.subtotal = producto.precio*producto.unidades;
+          return producto;
+        });
+      
+
+      renderizarCarrito();
+     
+    }
+    
+    if (e.target.matches('.btn-quitar')) {
+      
+    }
+  });
 }
 
 function calcularTotalCompra() {
   const $totalCarrito = document.querySelector(".total");
 
-  objProductoCarrito.total += objProductoCarrito.precio;
+  let totalCarrito = carrito.reduce((acc,producto) => acc + producto.subtotal, 0);
 
-  let totalCarrito =
-    objProductoCarrito.total === 0
-      ? objProductoCarrito.total
-      : formatValor(objProductoCarrito.total);
 
-  $totalCarrito.textContent = `$${totalCarrito}`;
+  $totalCarrito.textContent = `$${totalCarrito === 0 ? totalCarrito : formatValor(totalCarrito) }`;
 }
 
 function renderizarCarrito() {
@@ -138,15 +155,15 @@ function renderizarCarrito() {
     $template.querySelector(".nombre").classList.add("text-center");
     $template.querySelector(".unidades").innerHTML = unidades;
     $template.querySelector(".precio").innerHTML = `$${formatValor(precio)}`;
-    $template.querySelector(".subtotal").innerHTML = `$${formatValor(
-      subtotal
-    )}`;
+    $template.querySelector(".subtotal").innerHTML = `$${formatValor(subtotal)}`;
 
     let clone = document.importNode($template, true);
 
     $fragment.appendChild(clone);
   });
   $carritoContainer.appendChild($fragment);
+
+  calcularTotalCompra();
 }
 
 function formatValor(precio) {
