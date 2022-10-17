@@ -41,6 +41,7 @@ let productos = [
 let objProductoCarrito = {
   id: "",
   nombre: "",
+  imagen: "",
   precio: 0,
   subtotal: 0,
   unidades: 1,
@@ -89,12 +90,13 @@ function agregarProductoEnCarrito() {
     $btnProducto.addEventListener("click", (e) => {
       let productoId = parseInt(e.target.parentElement.dataset.productoId);
       let producto = productos.filter((producto) => producto.id === productoId);
-      let [{ id, nombre, precio }] = producto;
+      let [{ id, nombre, precio, imagen }] = producto;
       
       objProductoCarrito.id = id;
       objProductoCarrito.nombre = nombre;
       objProductoCarrito.precio = precio;
       objProductoCarrito.subtotal = precio;
+      objProductoCarrito.imagen = imagen;
 
       let existeProducto = carrito.find((producto) => producto.id === objProductoCarrito.id);
       if (existeProducto) return;
@@ -168,10 +170,12 @@ function renderizarCarrito() {
   const $template = document.querySelector("#template-carrito").content;
   const $fragment = document.createDocumentFragment();
 
-  carrito.forEach(({ id, nombre, precio, subtotal, unidades }) => {
+  carrito.forEach(({ id, nombre, precio, subtotal, unidades,imagen }) => {
     $template.querySelector(".producto-carrito").dataset.productoId = id;
     $template.querySelector(".nombre").textContent = nombre;
     $template.querySelector(".nombre").classList.add("text-center");
+    $template.querySelector(".producto-img > img").src = `assets/${imagen}`;
+    $template.querySelector(".producto-img > img").alt = nombre;
     $template.querySelector(".unidades").innerHTML = unidades;
     $template.querySelector(".precio").innerHTML = `$${formatValor(precio)}`;
     $template.querySelector(".subtotal").innerHTML = `$${formatValor(subtotal)}`;

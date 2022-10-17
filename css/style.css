@@ -216,6 +216,11 @@ p {
   font-style: oblique;
 }
 
+.carrito .producto-img {
+  width: 6rem;
+  margin: .5rem auto;
+}
+
 .carrito > .producto-carrito .subtotal{
   color: var(--third-color);
 }
