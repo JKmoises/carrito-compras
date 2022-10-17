@@ -111,25 +111,44 @@ function calcularSubtotalCompra() {
   document.addEventListener('click', e => {
     if (!(e.target.matches('.btn-agregar') || e.target.matches('.btn-quitar'))) return;
     
+    let productoCarritoId = parseInt(e.target.parentElement.parentElement.dataset.productoId);
+  
     if (e.target.matches('.btn-agregar')) {
-      let productoCarritoId = parseInt(e.target.parentElement.parentElement.dataset.productoId);
-
-      carrito
-        .filter(producto => producto.id === productoCarritoId)
-        .map(producto => {
-          producto.unidades += 1;
-          producto.subtotal = producto.precio*producto.unidades;
-          return producto;
-        });
-      
-
-      renderizarCarrito();
-     
+      agregarUnidadesProducto(productoCarritoId);
     }
     
     if (e.target.matches('.btn-quitar')) {
-      
+      quitarUnidadesProducto(productoCarritoId);
     }
+
+    console.log(carrito);
+    renderizarCarrito();
+  });
+}
+
+function quitarUnidadesProducto(productoId){
+  carrito = carrito
+    .map(producto => {
+      if (producto.id === productoId) {
+        producto.unidades -= 1;
+        producto.subtotal -= producto.precio;
+      }
+
+      return producto;
+    })
+    .filter(producto => producto.unidades >= 1);
+
+}
+
+function agregarUnidadesProducto(productoId){
+  carrito = carrito.map(producto => {
+    if (producto.id === productoId) {
+      producto.unidades += 1;
+      producto.subtotal = producto.precio * producto.unidades;
+    }
+
+
+    return producto;
   });
 }
 
