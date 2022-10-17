@@ -55,6 +55,7 @@ function iniciarApp() {
   agregarProductoEnCarrito();
   renderizarCarrito();
   calcularSubtotalCompra();
+  limpiarCarrito();
 }
 
 function renderizarProductos() {
@@ -121,7 +122,7 @@ function calcularSubtotalCompra() {
       quitarUnidadesProducto(productoCarritoId);
     }
 
-    console.log(carrito);
+    // console.log(carrito);
     renderizarCarrito();
   });
 }
@@ -146,10 +147,9 @@ function agregarUnidadesProducto(productoId){
       producto.unidades += 1;
       producto.subtotal = producto.precio * producto.unidades;
     }
-
-
     return producto;
   });
+
 }
 
 function calcularTotalCompra() {
@@ -185,6 +185,15 @@ function renderizarCarrito() {
   calcularTotalCompra();
 }
 
+function limpiarCarrito() {
+  const $btnLimpiar = document.querySelector('#btn-limpiar');
+
+  $btnLimpiar.addEventListener('click', () => {
+    carrito = [];
+    renderizarCarrito();
+  });
+}
+
 function formatValor(precio) {
   const options = {
     style: "currency",
@@ -209,7 +218,7 @@ function animarCardProducto() {
 }
 
 function limpiarHTML() {
-  const $carrito = document.querySelector(".carrito");
+  const $carrito = document.querySelector("#carrito");
 
   while ($carrito.firstElementChild) {
     $carrito.firstElementChild.remove();
