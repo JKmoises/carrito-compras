@@ -20,7 +20,7 @@ let productos = [
     nombre: "Mouse Gamer Pro",
     imagen: "mouse.jpg",
     precio: 130000,
-    unidades: 80,
+    unidades: 8,
   },
   {
     id: 4,
@@ -84,6 +84,7 @@ function renderizarProductos() {
 }
 
 function agregarProductoEnCarrito() {
+
   const $botonesProductos = document.querySelectorAll(".btn-producto");
 
   $botonesProductos.forEach(($btnProducto) => {
@@ -129,6 +130,35 @@ function calcularSubtotalCompra() {
   });
 }
 
+function agregarUnidadesProducto(productoId) {
+  const [producto] = productos.filter(producto => producto.id === productoId);
+  const stockProducto = producto.unidades;
+  
+  carrito = carrito.map(producto => {
+    if (producto.id === productoId) {
+      producto.unidades += 1;
+      producto.subtotal = producto.precio * producto.unidades;
+
+      console.log(producto.unidades,stockProducto);
+      if (producto.unidades > stockProducto) {
+        producto.unidades = stockProducto;
+  
+        Swal.fire({
+          title: 'Producto sin stock',
+          text: `El producto solo tiene ${stockProducto} unidades en su inventario`,
+          icon: 'info'
+        });
+      }
+    }
+
+    return producto;
+
+  });
+
+
+
+}
+
 function quitarUnidadesProducto(productoId){
   carrito = carrito
     .map(producto => {
@@ -143,16 +173,6 @@ function quitarUnidadesProducto(productoId){
 
 }
 
-function agregarUnidadesProducto(productoId){
-  carrito = carrito.map(producto => {
-    if (producto.id === productoId) {
-      producto.unidades += 1;
-      producto.subtotal = producto.precio * producto.unidades;
-    }
-    return producto;
-  });
-
-}
 
 function calcularTotalCompra() {
   const $totalCarrito = document.querySelector(".total");
@@ -197,6 +217,7 @@ function limpiarCarrito() {
     renderizarCarrito();
   });
 }
+
 
 function formatValor(precio) {
   const options = {
