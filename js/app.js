@@ -45,7 +45,6 @@ let objProductoCarrito = {
   precio: 0,
   subtotal: 0,
   unidades: 1,
-  total: 0,
 };
 
 let carrito = [];
@@ -57,12 +56,33 @@ function iniciarApp() {
   renderizarCarrito();
   calcularSubtotalCompra();
   limpiarCarrito();
+  terminarCompra();
+}
+
+function terminarCompra() {
+  const $btnComprar = document.querySelector('#btn-comprar');
+
+  $btnComprar.addEventListener('click', () => {
+    if (carrito.length === 0) {
+      Swal.fire({
+        title: 'Agrega un producto',
+        text: `Debes agregar al menos un producto al carrito`,
+        icon: 'warning'
+      });
+      return;
+    }
+    console.log(productos);
+
+    renderizarProductos();
+
+  });
 }
 
 function renderizarProductos() {
   const $productosContainer = document.querySelector("#productos");
   const $template = document.querySelector("#template-producto").content;
   const $fragment = document.createDocumentFragment();
+  limpiarHTML($productosContainer);
 
   productos.forEach(({ id, nombre, imagen, precio, unidades }) => {
     $template.querySelector(".producto").dataset.productoId = id;
@@ -88,26 +108,33 @@ function agregarProductoEnCarrito() {
   const $botonesProductos = document.querySelectorAll(".btn-producto");
 
   $botonesProductos.forEach(($btnProducto) => {
-    $btnProducto.addEventListener("click", (e) => {
-      let productoId = parseInt(e.target.parentElement.dataset.productoId);
-      let producto = productos.filter((producto) => producto.id === productoId);
-      let [{ id, nombre, precio, imagen }] = producto;
-      
-      objProductoCarrito.id = id;
-      objProductoCarrito.nombre = nombre;
-      objProductoCarrito.precio = precio;
-      objProductoCarrito.subtotal = precio;
-      objProductoCarrito.imagen = imagen;
-
-      let existeProducto = carrito.find((producto) => producto.id === objProductoCarrito.id);
-      if (existeProducto) return;
-      
-      
-      carrito = [...carrito, { ...objProductoCarrito }];
-      renderizarCarrito();
-      
-    });
+    $btnProducto.addEventListener("click",agregarProducto);
   });
+}
+
+function agregarProducto(e) {
+  let productoId = parseInt(e.target.parentElement.dataset.productoId);
+  let producto = productos.filter((producto) => {
+    producto.unidades--;
+    e.target.removeEventListener('click', agregarProducto);
+    return producto.id === productoId;
+  });
+
+  let [{ id, nombre, precio, imagen }] = producto;
+
+  objProductoCarrito.id = id;
+  objProductoCarrito.nombre = nombre;
+  objProductoCarrito.precio = precio;
+  objProductoCarrito.subtotal = precio;
+  objProductoCarrito.imagen = imagen;
+
+  let existeProducto = carrito.find((producto) => producto.id === objProductoCarrito.id);
+  if (existeProducto) return;
+
+
+  carrito = [...carrito, { ...objProductoCarrito }];
+  renderizarCarrito();
+
 }
 
 
@@ -130,33 +157,33 @@ function calcularSubtotalCompra() {
   });
 }
 
-function agregarUnidadesProducto(productoId) {
-  const [producto] = productos.filter(producto => producto.id === productoId);
-  const stockProducto = producto.unidades;
-  
+function agregarUnidadesProducto(productoId) {  
   carrito = carrito.map(producto => {
     if (producto.id === productoId) {
       producto.unidades += 1;
       producto.subtotal = producto.precio * producto.unidades;
-
-      console.log(producto.unidades,stockProducto);
-      if (producto.unidades > stockProducto) {
-        producto.unidades = stockProducto;
-  
-        Swal.fire({
-          title: 'Producto sin stock',
-          text: `El producto solo tiene ${stockProducto} unidades en su inventario`,
-          icon: 'info'
-        });
-      }
     }
-
+    
+    descontarStockProducto(productoId);
     return producto;
-
+    
   });
 
 
+  
+}
 
+function descontarStockProducto(productoId) {
+  productos = productos.map(producto => {
+    if (producto.id === productoId) {
+      producto.unidades--;
+      
+      // console.log(producto.unidades);
+    }
+    return producto;
+
+  });
+  console.log(productos);
 }
 
 function quitarUnidadesProducto(productoId){
@@ -172,6 +199,7 @@ function quitarUnidadesProducto(productoId){
     .filter(producto => producto.unidades >= 1);
 
 }
+
 
 
 function calcularTotalCompra() {
@@ -242,10 +270,9 @@ function animarCardProducto() {
   });
 }
 
-function limpiarHTML() {
-  const $carrito = document.querySelector("#carrito");
+function limpiarHTML($container = document.querySelector("#carrito")) {
 
-  while ($carrito.firstElementChild) {
-    $carrito.firstElementChild.remove();
+  while ($container.firstElementChild) {
+    $container.firstElementChild.remove();
   }
 }
