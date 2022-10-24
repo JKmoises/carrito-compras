@@ -13,6 +13,7 @@
   --gray-dark-color: #666666;
   --black-color: #000000;
   --green-color:#186A3B;
+  --red-color: #dc3545;
   --link-color: #509EE3;
   --title-color: #333333;
   --text-color: #222222;
@@ -370,10 +371,22 @@ p {
   font-size: 1.5rem;
 }
 
+
 .unidades > sub{
   font-size: 1.3rem;
   font-weight: 700;
   color: var(--black-color);
+}
+
+.unidades.no-stock{
+  font-size: 1rem;
+  color: var(--red-color);
+  font-weight: 700;
+  text-transform: uppercase;
+  text-decoration: overline;
+  text-decoration-color: var(--second-color);
+  text-align: center;
+  letter-spacing: .1rem;
 }
 
 @media screen and (min-width: 468px) {
@@ -387,10 +400,15 @@ p {
   .carrito-container {
     width: 30%;
   }
-
+  
   .precio-unidades-container{
     flex-direction: row;
   }
+
+  .unidades.no-stock{
+    flex: 1;
+  }
+  
 
 }
 
