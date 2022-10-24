@@ -45,9 +45,11 @@ let objProductoCarrito = {
   precio: 0,
   subtotal: 0,
   unidades: 1,
+  stock: 0,
 };
 
 let carrito = [];
+let totalCarrito = 0;
 
 function iniciarApp() {
   renderizarProductos();
@@ -71,9 +73,13 @@ function terminarCompra() {
       });
       return;
     }
-    console.log(productos);
+    carrito = [];
+    total = 0;
 
+    limpiarHTML();
+    calcularTotalCompra();
     renderizarProductos();
+    agregarProductoEnCarrito();
 
   });
 }
@@ -89,6 +95,7 @@ function renderizarProductos() {
     $template.querySelector(".producto-img > img").src = `assets/${imagen}`;
     $template.querySelector(".producto-img > img").alt = nombre;
     $template.querySelector(".nombre").textContent = nombre;
+    $template.querySelector(".unidades").dataset.productoUnidades = unidades;
     $template.querySelector(
       ".unidades"
     ).innerHTML = /* html */ `<sub>${unidades}</sub> unidades`;
@@ -114,26 +121,35 @@ function agregarProductoEnCarrito() {
 
 function agregarProducto(e) {
   let productoId = parseInt(e.target.parentElement.dataset.productoId);
-  let producto = productos.filter((producto) => {
-    producto.unidades--;
-    e.target.removeEventListener('click', agregarProducto);
-    return producto.id === productoId;
-  });
+  let producto = productos.filter((producto) => producto.id === productoId);
+  console.log(producto);
 
-  let [{ id, nombre, precio, imagen }] = producto;
+  let [{ id, nombre, precio, imagen,unidades }] = producto;
 
   objProductoCarrito.id = id;
   objProductoCarrito.nombre = nombre;
   objProductoCarrito.precio = precio;
   objProductoCarrito.subtotal = precio;
   objProductoCarrito.imagen = imagen;
+  objProductoCarrito.stock = unidades;
 
-  let existeProducto = carrito.find((producto) => producto.id === objProductoCarrito.id);
+  
+  let existeProducto = carrito.find(producto => producto.id === objProductoCarrito.id);
   if (existeProducto) return;
 
+  productos = productos.map(producto => {
+    if (producto.id === productoId) {
+      producto.unidades--;
+    }
+
+    return producto;
+  })
 
   carrito = [...carrito, { ...objProductoCarrito }];
   renderizarCarrito();
+
+
+
 
 }
 
@@ -152,22 +168,30 @@ function calcularSubtotalCompra() {
       quitarUnidadesProducto(productoCarritoId);
     }
 
-    // console.log(carrito);
     renderizarCarrito();
   });
 }
 
 function agregarUnidadesProducto(productoId) {  
   carrito = carrito.map(producto => {
-    if (producto.id === productoId) {
-      producto.unidades += 1;
-      producto.subtotal = producto.precio * producto.unidades;
+    if (producto.id  === productoId) {
+      if (producto.unidades === producto.stock) {
+        Swal.fire({
+          title: 'Sin stock',
+          html: `El producto <b>${producto.nombre}</b> no tiene stock`,
+          icon: 'warning'
+        });
+      } else {
+        producto.unidades += 1;
+        producto.subtotal = producto.precio * producto.unidades;
+      }
+      console.log(producto.unidades);
     }
     
-    descontarStockProducto(productoId);
     return producto;
     
   });
+  descontarStockProducto(productoId);
 
 
   
@@ -175,7 +199,7 @@ function agregarUnidadesProducto(productoId) {
 
 function descontarStockProducto(productoId) {
   productos = productos.map(producto => {
-    if (producto.id === productoId) {
+    if (producto.id  === productoId) {
       producto.unidades--;
       
       // console.log(producto.unidades);
@@ -183,7 +207,7 @@ function descontarStockProducto(productoId) {
     return producto;
 
   });
-  console.log(productos);
+  // console.log(productos);
 }
 
 function quitarUnidadesProducto(productoId){
@@ -205,7 +229,7 @@ function quitarUnidadesProducto(productoId){
 function calcularTotalCompra() {
   const $totalCarrito = document.querySelector(".total");
 
-  let totalCarrito = carrito.reduce((acc,producto) => acc + producto.subtotal, 0);
+  totalCarrito = carrito.reduce((acc,producto) => acc + producto.subtotal, 0);
 
 
   $totalCarrito.textContent = `$${totalCarrito === 0 ? totalCarrito : formatValor(totalCarrito) }`;
