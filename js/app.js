@@ -59,6 +59,7 @@ function iniciarApp() {
   calcularSubtotalCompra();
   limpiarCarrito();
   terminarCompra();
+  toggleCarrito();
 }
 
 function terminarCompra() {
@@ -79,8 +80,27 @@ function terminarCompra() {
     limpiarHTML();
     calcularTotalCompra();
     renderizarProductos();
+    animarCardProducto();
     agregarProductoEnCarrito();
 
+  });
+}
+
+function toggleCarrito() {
+  const $btnCarrito = document.querySelector('#carrito-icon');
+  const $carritoContainer = document.querySelector('#carrito-container');
+
+
+  $btnCarrito.addEventListener('click', () => {
+    $carritoContainer.classList.toggle('none');
+    $btnCarrito.classList.toggle('carrito-icon-toggle');
+
+    if ($btnCarrito.classList.contains('carrito-icon-toggle')) {
+      $btnCarrito.title = "Haga click para ocultar Carrito";
+    } else {
+      $btnCarrito.title = "Haga click para fijar Carrito";
+
+    }
   });
 }
 

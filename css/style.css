@@ -270,9 +270,12 @@ p {
   border-radius: 50%;
 }
 
+.carrito-icon.carrito-icon-toggle,
 .carrito-icon:hover {
   background-color: var(--third-color);
 }
+
+
 
 .navegacion{
   display: flex;
